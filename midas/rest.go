@@ -38,7 +38,7 @@ func Middleware(next http.HandlerFunc, cfg MidConfig) http.HandlerFunc {
 		next.ServeHTTP(w, r)
 
 		duration := time.Since(start)
-		log.Info().
+		cfg.Log.Info().
 			Str("method", r.Method).
 			Stringer("url", r.URL).
 			Str("remote", r.RemoteAddr).
