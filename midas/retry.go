@@ -2,7 +2,6 @@ package midas
 
 import (
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"time"
 )
 
@@ -17,13 +16,13 @@ func RetryFunc[T any](cfg RetryConfig[T], start func(config T, log zerolog.Logge
 		func() {
 			defer func() {
 				if r := recover(); r != nil {
-					log.Error().Msgf("panic caught: %v", r)
+					cfg.Logger.Error().Msgf("panic caught: %v", r)
 				}
 			}()
 			time.Sleep(time.Duration(1<<i) * time.Second) //exp duration
-			log.Info().Msgf("%d try of start", i)
+			cfg.Logger.Info().Msgf("%d try of start", i)
 			if err := start(cfg.Config, cfg.Logger); err != nil { //start thats func for starting program
-				log.Error().Msgf("error starting %d try: %v", i, err)
+				cfg.Logger.Error().Err(err).Msgf("error starting %d try: %v", i, err)
 			}
 		}()
 	}
