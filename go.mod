@@ -1,4 +1,4 @@
-module frame
+module github.com/MidasWR/base-sdk-framework
 
 go 1.24
 
