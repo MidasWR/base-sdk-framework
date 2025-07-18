@@ -6,7 +6,7 @@ import (
 )
 
 type RetryConfig[T any] struct {
-	Config   T
+	Config   T //For any config type
 	Logger   *zerolog.Logger
 	Attempts int
 }
@@ -19,9 +19,9 @@ func RetryFunc[T any](log zerolog.Logger, cfg RetryConfig[T], start func(config 
 					log.Error().Msgf("panic caught: %v", r)
 				}
 			}()
-			time.Sleep(time.Duration(1<<i) * time.Second)
+			time.Sleep(time.Duration(1<<i) * time.Second) //exp duration
 			log.Info().Msgf("%d try of start", i)
-			if err := start(cfg.Config, log); err != nil {
+			if err := start(cfg.Config, log); err != nil { //start thats func for starting program
 				log.Error().Msgf("error starting %d try: %v", i, err)
 			}
 		}()
